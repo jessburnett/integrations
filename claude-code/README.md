@@ -40,6 +40,9 @@ I'd know within one session if it wasn't."
 
 That's the whole install for drift detection. The SessionStart hook is
 dependency-free (Python standard library only), so it never blocks a session.
+It tries `python3` first, falls back to `python`, and if neither is on
+`PATH` it skips the check with a benign message rather than crashing the
+session.
 
 On your **first** session after install, it records your baseline and tells you:
 
@@ -188,7 +191,8 @@ This plugin is honest about what it is. On a normal developer machine:
 ```
 claude-code/
   .claude-plugin/plugin.json   plugin manifest
-  hooks/hooks.json             SessionStart -> engine/capture.py hook
+  hooks/hooks.json             SessionStart -> hooks/session-start.sh
+  hooks/session-start.sh       picks python3/python, runs engine/capture.py hook
   commands/manifest.md         /manifest verify | approve | show
   commands/trace.md            /trace report
   engine/capture.py            capture engine (stdlib hook + signing report)
